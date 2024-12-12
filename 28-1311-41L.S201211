@@ -1,0 +1,9 @@
+2012 333 1311 42.0 L 2380301.98 BER  5 .50 2.9LBER                1
+GAP=177   BER  1.34       4.2     3.4  8.4 -0.6081E+01  0.6370E+00 -0.1746E+02E
+2012-11-28-13:11:41.980S.NSN___018                                                 6
+STAT COM NTLO IPHASE   W HHMM SS.SSS   PAR1  PAR2 AGA OPE  AIN  RES W  DIS CAZ7
+DBIC HHZ  GT   IP        3967229.020                    BER  opt0.0   0.3700 73.69 320
+DBIC HHZ  GT   ISg       3967300.230                    BER  opt0.0   0.2600 73.69 320
+KUKU HHZ  GH   IP        3967205.680                    BER  opt0.0   0.7037 307.90320
+MRON HHZ  GH   ISg       3967214.900                    BER  opt0.0   0.2300 329.64320
+MRON HHZ  GH   IP        3967202.620                    BER  opt0.0   0.8000 329.64320

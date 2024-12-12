@@ -1,0 +1,13 @@
+2012 310 1004 58.1 L 381898.108 BER  5 .50 2.9LBER                1
+GAP=177   BER  1.34       4.2     3.4  8.4 -0.6081E+01  0.6370E+00 -0.1746E+02E
+2012-11-05-10:04:58.108S.NSN___018                                                 6
+STAT COM NTLO IPHASE   W HHMM SS.SSS   PAR1  PAR2 AGA OPE  AIN  RES W  DIS CAZ7
+SHAI HHZ  GH   IP        6365 10.150                    BER  opt0.0   0.0800 33.60 320
+SHAI HHZ  GH   ISg       6365 22.420                    BER  opt0.0   0.5000 33.60 320
+AKOS HHZ  GH   IP        6365 00.500                    BER  opt0.0   0.7840 57.75 320
+AKOS HHZ  GH   ISg       6365 02.150                    BER  opt0.0   0.2911 57.75 320
+KUKU HHZ  GH   IP        6365 17.250                    BER  opt0.0   0.0800 66.74 320
+KUKU HHZ  GH   ISg       6365 25.680                    BER  opt0.0   0.2100 66.74 320
+MRON HHZ  GH   IP        6365 32.780                    BER  opt0.0   0.1100 87.24 320
+MRON HHZ  GH   ISg       6365 49.680                    BER  opt0.0   0.1900 87.24 320
+KLEF HHZ  GH   IP        6364 58.960                    BER  opt0.0   0.2100 152.83320

@@ -1,0 +1,9 @@
+2012 314 0512 25.6 L 709945.591 BER  5 .50 2.9LBER                1
+GAP=177   BER  1.34       4.2     3.4  8.4 -0.6081E+01  0.6370E+00 -0.1746E+02E
+2012-11-09-05:12:25.591S.NSN___018                                                 6
+STAT COM NTLO IPHASE   W HHMM SS.SSS   PAR1  PAR2 AGA OPE  AIN  RES W  DIS CAZ7
+KUKU HHZ  GH   IP        1183302.010                    BER  opt0.0   0.9288 120.72320
+SHAI HHZ  GH   IP        1183255.010                    BER  opt0.0   0.9091 120.81320
+AKOS HHZ  GH   IP        1183302.010                    BER  opt0.0   0.9983 130.01320
+KLEF HHZ  GH   IP        1183258.950                    BER  opt0.0   0.3600 144.44320
+KLEF HHZ  GH   ISg       1183326.550                    BER  opt0.0   0.2700 144.44320

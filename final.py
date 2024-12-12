@@ -50,7 +50,8 @@ def parse_earthquake_phases(input_file):
                     'value1': float(phase_data[5]),
                     'value2': float(phase_data[6]),
                     'uncertainty': float(phase_data[7]),
-                    'azimuth': float(phase_data[8])
+                    'azimuth': float(phase_data[8]),
+                    'caz7' : 320
                 }
                 # Add phase to current event
                 current_event['phases'].append(phase)
@@ -74,52 +75,71 @@ def parse_earthquake_phases(input_file):
 
 def write_earthquake_data(output_file, event):
     with open(output_file, 'w') as file:
-        for event in events:
-            print(event)
-            # Write event header line
+        print(event)
 
-            # origin_time: 2012 306 0042 40.5 (YYYY day_of_year HHMM SS.1f) -> 1 houses microseconds
-            formatted_origin_time = event['origin_time'].strftime('%Y %j %H%M') + f" {event['origin_time'].second + event['origin_time'].microsecond / 1e6:.1f}"
-            
-            file.write(f"{formatted_origin_time} L {str(event['relative_time'])} ")
-            file.write("BER  5 .50 2.9LBER                1\n")
-            file.write("GAP=177   BER  1.34       4.2     3.4  8.4 -0.6081E+01  0.6370E+00 -0.1746E+02E\n")
+        # Write event header line
+        # Format origin_time as: 2012 306 0042 40.5 (YYYY day_of_year HHMM SS.1f)
+        formatted_origin_time = (
+            event['origin_time'].strftime('%Y %j %H%M') +
+            f" {event['origin_time'].second + event['origin_time'].microsecond / 1e6:.1f}"
+        )
+        file.write(f"{formatted_origin_time} L {str(event['relative_time'])} ")
+        file.write("BER  5 .50 2.9LBER                1\n")
+        file.write("GAP=177   BER  1.34       4.2     3.4  8.4 -0.6081E+01  0.6370E+00 -0.1746E+02E\n")
 
-            # origin_time: 2012-11-01-00:42:40.507 (YYYY-MM-DD-HH:MM:SS.3f) -> 3 houses microseconds
-            final_origin_time = event['origin_time'].strftime("%Y-%m-%d-%H:%M:%S.") + f"{event['origin_time'].microsecond // 1000:03d}"
+        # Format origin_time as: 2012-11-01-00:42:40.507 (YYYY-MM-DD-HH:MM:SS.3f)
+        final_origin_time = (
+            event['origin_time'].strftime("%Y-%m-%d-%H:%M:%S.") +
+            f"{event['origin_time'].microsecond // 1000:03d}"
+        )
+        file.write(f"{final_origin_time}S.NSN___018                                                 6\n")
+        file.write("STAT COM NTLO IPHASE   W HHMM SS.SSS   PAR1  PAR2 AGA OPE  AIN  RES W  DIS CAZ7\n")
 
+        # Write each phase line
+        for phase in event['phases']:
+            hhmm = f"{int(phase['relative_time'] // 60):04}"  # Ensure HHMM is 4 characters
+            ss_sss = f"{phase['relative_time'] % 60:06.3f}"   # Format seconds to 3 decimal places
+            phase_type = "IP" if phase['phase_type'] == "P" else "ISg"  # Determine phase type
+
+            # Write formatted line for each phase
             file.write(
-                f"{final_origin_time}S.NSN___018                                                 6\n")
-            file.write("STAT COM NTLO IPHASE   W HHMM SS.SSS   PAR1  PAR2 AGA OPE  AIN  RES W  DIS CAZ7\n")
-
-            # Write each phase line
-            for phase in event['phases']:
-                hhmm = f"{int(phase['relative_time'] // 60):02}:{int(phase['relative_time'] % 60):02}"
-                ss_sss = f"{phase['relative_time'] % 60:.3f}"
-                phase_type = ""
-                if phase['phase_type'] == "P":
-                    phase_type = "IP"
-                else:
-                    phase_type = "ISg"
-                """
-                file.write(f"{phase['station_code']} HHZ {phase['network_code']}   {phase_type}\t  "
-                           f"{hhmm} {ss_sss} BER opt {phase['value1']} {phase['uncertainty']} {phase['azimuth']}\n")
-                """
-                file.write(f"{phase['station_code']} HHZ {phase['network_code']}   {phase_type}\t  "
-                        f"{hhmm} {ss_sss} BER opt {phase['value1']} {phase['uncertainty']} {phase['azimuth']}\n")
-
-   
+                f"{phase['station_code']:<5}HHZ  {phase['network_code']:<3}  {phase_type:<10}"
+                f"{hhmm:<5}{ss_sss:<12}              BER  opt{phase['value1']:<6.1f}"
+                f"{phase['uncertainty']:<7.4f}{phase['azimuth']:<6.2f}320\n"
+            )
+                
 
 # Usage
 # Load CSV file
 input_file = os.path.join(os.getcwd(), 'input.out')
-output_file = os.path.join(os.getcwd(), 'output.csv')
 events, stream = parse_earthquake_phases(input_file)
 
-print(events[0])
-
 # Write the parsed data to the output file
-write_earthquake_data(output_file, events[0])
+for event in events:
+    origin_time = event['origin_time']
+    # Ensure 2-digit format
+    day = f"{origin_time.day:02}"       
+    hh = f"{origin_time.hour:02}"
+    mm = f"{origin_time.minute:02}"
+    sec = f"{origin_time.second:02}"
+    month = f"{origin_time.month:02}"
+    year = origin_time.year
+
+    # Determine the hypocenter category based on depth
+    hypocenter = "L" if event.get('depth', 0) < 150 else "D"
+
+    # Construct the output file name
+    # day-hhmm-seL.Syearmonth
+    output_file_name = f"{day}-{hh}{mm}-{sec}{hypocenter}.S{year}{month}"
+    
+    # Just for debbuggin
+    print(f"File name: {output_file_name}")
+    print(f"Event: {event}")
+
+    # Construct the full path to the output file
+    output_file = os.path.join(os.getcwd(), output_file_name)
+
+    write_earthquake_data(output_file, event)
 
 '''
 for trace in stream:
